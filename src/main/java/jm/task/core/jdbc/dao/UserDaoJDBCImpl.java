@@ -25,7 +25,7 @@ public class UserDaoJDBCImpl implements UserDao {
                     age SMALLINT
                     );
                     """;
-            var executed = statement.execute(sql);
+            boolean executed = statement.execute(sql);
             System.out.printf("Таблица users создана %s\n", executed);
         } catch (SQLException e) {
             throw new RuntimeException(e);

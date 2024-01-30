@@ -24,7 +24,7 @@ public class Main {
         users.forEach(x -> userService.saveUser(x.getName(), x.getLastName(), x.getAge()));
         userService.getAllUsers().forEach(System.out::println);
         userService.removeUserById(2);
-        //userService.dropUsersTable();
-
+        userService.cleanUsersTable();
+        userService.dropUsersTable();
     }
 }
