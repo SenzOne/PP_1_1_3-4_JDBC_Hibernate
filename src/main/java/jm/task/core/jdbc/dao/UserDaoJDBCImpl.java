@@ -4,8 +4,10 @@ import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
@@ -48,13 +50,12 @@ public class UserDaoJDBCImpl implements UserDao {
              Statement statement = connection.createStatement();
         ) {
 
-            String sql = """
-                    INSERT INTO users (name) VALUES ('name');
-                     """;
+            String sql =
+                    String.format("INSERT INTO users (name, lastName, age) " +
+                                  "VALUES ('%s', '%s', %d)", name, lastName, age);
 
-            var executeResult = statement.execute(sql);
+            var executeResult = statement.executeUpdate(sql);
             System.out.println(executeResult);
-            System.out.println(connection.getSchema());
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -66,7 +67,30 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public List<User> getAllUsers() {
-        return null;
+        List<User> userFromDb = new ArrayList<>();
+        try (var connection = Util.open();
+             Statement statement = connection.createStatement();
+        ) {
+
+            String sql ="SELECT * FROM users;";
+
+            var executeResult = statement.executeQuery(sql);
+            while (executeResult.next()) {
+                User user = new User();
+                        user.setId((long) executeResult.getInt("id"));
+                        user.setName(executeResult.getString("name"));
+                        user.setLastName(executeResult.getString("lastname"));
+                        user.setAge ((byte) executeResult.getInt("age"));
+
+                userFromDb.add(user);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        return userFromDb;
     }
 
     public void cleanUsersTable() {
