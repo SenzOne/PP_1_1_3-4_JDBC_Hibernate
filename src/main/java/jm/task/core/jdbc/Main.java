@@ -11,11 +11,11 @@ public class Main {
     public static void main(String[] args) {
 
         List<User> users = new ArrayList<>(List.of(
-                new User("alice", "Smith", (byte) 25),
-                new User("john", "Doe", (byte) 30),
-                new User("emma", "Johnson", (byte) 22),
-                new User("michael", "Williams", (byte) 35),
-                new User("sophia", "Brown", (byte) 28)
+                new User("Alice", "Smith", (byte) 25),
+                new User("John", "Doe", (byte) 30),
+                new User("Emma", "Johnson", (byte) 22),
+                new User("Michael", "Williams", (byte) 35),
+                new User("Sophia", "Brown", (byte) 28)
         ));
 
 

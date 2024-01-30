@@ -25,8 +25,8 @@ public class UserDaoJDBCImpl implements UserDao {
                     age SMALLINT
                     );
                     """;
-            var executed = statement.executeUpdate(sql);
-            System.out.println(executed);
+            var executed = statement.execute(sql);
+            System.out.printf("Таблица users создана %s\n", executed);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -36,9 +36,10 @@ public class UserDaoJDBCImpl implements UserDao {
         try (var connection = Util.open()) {
             Statement statement = connection.createStatement();
 
-            String SQL = "DROP TABLE IF EXISTS users";
+            String sql = "DROP TABLE IF EXISTS users";
+            var executed = statement.execute(sql);
+            System.out.printf("Таблица users удалена %s\n", executed);
 
-            statement.execute(SQL);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -55,7 +56,7 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.setByte(3, age);
 
             preparedStatement.executeUpdate();
-            System.out.println(name + " добавлен в базу данных.");
+            System.out.printf("%s добавлен в базу данных.\n", name);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -69,7 +70,7 @@ public class UserDaoJDBCImpl implements UserDao {
         ) {
             preparedStatement.setLong(1, id);
             var executeResult = preparedStatement.executeUpdate();
-            System.out.println(executeResult);
+            System.out.printf("%d Строк(а) удалено(а).\n", executeResult);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -102,8 +103,8 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void cleanUsersTable() {
-        String sql ="TRUNCATE TABLE users";
-        try (var connection = Util.open()){
+        String sql = "TRUNCATE TABLE users";
+        try (var connection = Util.open()) {
             Statement statement = connection.createStatement();
             statement.execute(sql);
         } catch (SQLException e) {
