@@ -15,7 +15,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void createUsersTable() {
-        try (var connection = Util.open()) {
+        try (var connection = Util.getConnection()) {
             Statement statement = connection.createStatement();
             String sql = """
                     CREATE TABLE IF NOT EXISTS users (
@@ -33,7 +33,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void dropUsersTable() {
-        try (var connection = Util.open()) {
+        try (var connection = Util.getConnection()) {
             Statement statement = connection.createStatement();
 
             String sql = "DROP TABLE IF EXISTS users";
@@ -47,7 +47,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void saveUser(String name, String lastName, byte age) {
         String sql = "INSERT INTO users (name, lastName, age) VALUES (?, ?, ?)";
-        try (var connection = Util.open();
+        try (var connection = Util.getConnection();
              var preparedStatement = connection.prepareStatement(sql)
 
         ) {
@@ -65,7 +65,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void removeUserById(long id) {
         String sql = "DELETE FROM users WHERE id=?;";
-        try (var connection = Util.open();
+        try (var connection = Util.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
             preparedStatement.setLong(1, id);
@@ -79,7 +79,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public List<User> getAllUsers() {
         List<User> userFromDb = new ArrayList<>();
-        try (var connection = Util.open();
+        try (var connection = Util.getConnection();
              Statement statement = connection.createStatement()
         ) {
 
@@ -104,7 +104,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void cleanUsersTable() {
         String sql = "TRUNCATE TABLE users";
-        try (var connection = Util.open()) {
+        try (var connection = Util.getConnection()) {
             Statement statement = connection.createStatement();
             statement.execute(sql);
         } catch (SQLException e) {
