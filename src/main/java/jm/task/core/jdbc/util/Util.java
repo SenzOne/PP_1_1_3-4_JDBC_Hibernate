@@ -21,8 +21,6 @@ public class Util {
     private static List<Connection> sourceConnections;
 
 
-    // реализуйте настройку соеденения с БД//todo: лишний закомм-ый код не нужен
-
     static {
         initConnectionPool();
     }
@@ -43,7 +41,7 @@ public class Util {
 
     }
 
-    public static Connection getConnection() {
+    public static Connection getConnectionFromPool() {
         try {
             return pool.take();
         } catch (InterruptedException e) {

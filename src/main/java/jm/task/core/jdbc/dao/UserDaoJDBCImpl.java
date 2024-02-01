@@ -2,6 +2,7 @@ package jm.task.core.jdbc.dao;
 
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
+
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -14,13 +15,12 @@ public class UserDaoJDBCImpl implements UserDao {
 
     }
 
-    //todo: выносим и правильно по смыслу именуем константв, например:
     private final static String CREATE_USERS_QUERY =
             "CREATE TABLE IF NOT EXISTS users (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(25), lastName VARCHAR(25), age SMALLINT)";
 
     public void createUsersTable() {
         try (var connection = Util.getConnectionFromPool();
-             Statement statement = connection.createStatement()) {//todo: в качестве ресурса - Statement (можно уедиться, он - AutoCloseable)
+             Statement statement = connection.createStatement()) {
             statement.execute(CREATE_USERS_QUERY);
         } catch (SQLException e) {
             //todo:
@@ -31,8 +31,8 @@ public class UserDaoJDBCImpl implements UserDao {
     private final static String DROP_USERS_TABLE_QUERY = "DROP TABLE IF EXISTS users";
 
     public void dropUsersTable() {
-        try (var connection = Util.getConnectionFromPool()) {
-            Statement statement = connection.createStatement();
+        try (var connection = Util.getConnectionFromPool();
+             Statement statement = connection.createStatement()) {
             statement.execute(DROP_USERS_TABLE_QUERY);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -89,8 +89,8 @@ public class UserDaoJDBCImpl implements UserDao {
     private final static String CLEAN_USERS_TABLE_QUERY = "TRUNCATE TABLE users";
 
     public void cleanUsersTable() {
-        try (var connection = Util.getConnectionFromPool()) {
-            Statement statement = connection.createStatement();
+        try (var connection = Util.getConnectionFromPool();
+             Statement statement = connection.createStatement()) {
             statement.execute(CLEAN_USERS_TABLE_QUERY);
         } catch (SQLException e) {
             throw new RuntimeException(e);
