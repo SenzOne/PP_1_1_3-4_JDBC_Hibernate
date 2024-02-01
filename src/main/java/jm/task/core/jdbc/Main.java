@@ -9,8 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) {
 
+    public static void main(String[] args) {
+        //todo: зачем? нет не стоит, так не делается
         try {
             runApp();
         } finally {

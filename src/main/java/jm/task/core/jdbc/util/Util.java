@@ -1,6 +1,5 @@
 package jm.task.core.jdbc.util;
 
-
 import java.lang.reflect.Proxy;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,8 +10,8 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 import java.util.concurrent.BlockingQueue;
 
-
 public class Util {
+
     private static final String PASSWORD_KEY = "db.password";
     private static final String USERNAME_KEY = "db.username";
     private static final String URL = "db.url";
@@ -22,7 +21,7 @@ public class Util {
     private static List<Connection> sourceConnections;
 
 
-    // реализуйте настройку соеденения с БД
+    // реализуйте настройку соеденения с БД//todo: лишний закомм-ый код не нужен
 
     static {
         initConnectionPool();

@@ -10,36 +10,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
-    public UserDaoJDBCImpl() {
+    //todo: codeStyle
+
+    public UserDaoJDBCImpl() {//todo: connection - точка доступа и отдельное поле, инициализация через конструктор
 
     }
 
+    //todo: выносим и правильно по смыслу именуем константв, например:
+    private final static String CREATE_USERS_QUERY = "CREATE TABLE IF NOT EXISTS users (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(25), lastName VARCHAR(25), age SMALLINT)";
+
     public void createUsersTable() {
-        try (var connection = Util.getConnection()) {
+        try (var connection = Util.getConnection()) {//todo: в качестве ресурса - Statement (можно уедиться, он - AutoCloseable)
             Statement statement = connection.createStatement();
-            String sql = """
-                    CREATE TABLE IF NOT EXISTS users (
-                    id INT PRIMARY KEY AUTO_INCREMENT,
-                    name VARCHAR(25),
-                    lastName VARCHAR(25),
-                    age SMALLINT
-                    );
-                    """;
-            boolean executed = statement.execute(sql);
-            System.out.printf("Таблица users создана %s\n", executed);
+            boolean executed = statement.execute(CREATE_USERS_QUERY);
+            System.out.printf("Таблица users создана %s\n", executed);//todo: все логи - на слое service
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            //todo:
+            throw new RuntimeException("...роняем приложение, если дальнейшая работа не целесообразна: в ином случае - stackTrace " + e.getMessage());
         }
     }
 
-    public void dropUsersTable() {
+    public void dropUsersTable() {//todo: codeStyle
         try (var connection = Util.getConnection()) {
             Statement statement = connection.createStatement();
-
             String sql = "DROP TABLE IF EXISTS users";
             var executed = statement.execute(sql);
             System.out.printf("Таблица users удалена %s\n", executed);
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -82,9 +78,7 @@ public class UserDaoJDBCImpl implements UserDao {
         try (var connection = Util.getConnection();
              Statement statement = connection.createStatement()
         ) {
-
             String sql = "SELECT * FROM users;";
-
             var executeResult = statement.executeQuery(sql);
             while (executeResult.next()) {
                 User user = new User();
@@ -92,10 +86,8 @@ public class UserDaoJDBCImpl implements UserDao {
                 user.setName(executeResult.getObject("name", String.class));
                 user.setLastName(executeResult.getObject("lastname", String.class));
                 user.setAge(executeResult.getObject("age", Byte.class));
-
                 userFromDb.add(user);
             }
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
