@@ -11,35 +11,41 @@ import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
 
-    public UserDaoJDBCImpl() {//todo: connection - точка доступа и отдельное поле, инициализация через конструктор
-
-    }
-
     private final static String CREATE_USERS_QUERY =
             "CREATE TABLE IF NOT EXISTS users (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(25), lastName VARCHAR(25), age SMALLINT)";
+
+    private final static String DROP_USERS_TABLE_QUERY = "DROP TABLE IF EXISTS users";
+
+    private final static String INSERT_IN_TO_USERS_QUERY = "INSERT INTO users (name, lastName, age) VALUES (?, ?, ?)";
+
+    private final static String DELETE_USERS_BY_ID_QUERY = "DELETE FROM users WHERE id=?;";
+
+    private final static String GET_ALL_USERS_QUERY = "SELECT * FROM users;";
+
+    private final static String CLEAN_USERS_TABLE_QUERY = "TRUNCATE TABLE users";
+
+
+    public UserDaoJDBCImpl() {
+
+    }
 
     public void createUsersTable() {
         try (var connection = Util.getConnectionFromPool();
              Statement statement = connection.createStatement()) {
             statement.execute(CREATE_USERS_QUERY);
         } catch (SQLException e) {
-            //todo:
-            throw new RuntimeException("...роняем приложение, если дальнейшая работа не целесообразна: в ином случае - stackTrace " + e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
-
-    private final static String DROP_USERS_TABLE_QUERY = "DROP TABLE IF EXISTS users";
 
     public void dropUsersTable() {
         try (var connection = Util.getConnectionFromPool();
              Statement statement = connection.createStatement()) {
             statement.execute(DROP_USERS_TABLE_QUERY);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
-
-    private final static String INSERT_IN_TO_USERS_QUERY = "INSERT INTO users (name, lastName, age) VALUES (?, ?, ?)";
 
     public void saveUser(String name, String lastName, byte age) {
         try (var connection = Util.getConnectionFromPool();
@@ -49,11 +55,9 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.setByte(3, age);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
-
-    private final static String DELETE_USERS_BY_ID_QUERY = "DELETE FROM users WHERE id=?;";
 
     public void removeUserById(long id) {
         try (var connection = Util.getConnectionFromPool();
@@ -61,11 +65,9 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
-
-    private final static String GET_ALL_USERS_QUERY = "SELECT * FROM users;";
 
     public List<User> getAllUsers() {
         List<User> userFromDb = new ArrayList<>();
@@ -81,19 +83,17 @@ public class UserDaoJDBCImpl implements UserDao {
                 userFromDb.add(user);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
         return userFromDb;
     }
-
-    private final static String CLEAN_USERS_TABLE_QUERY = "TRUNCATE TABLE users";
 
     public void cleanUsersTable() {
         try (var connection = Util.getConnectionFromPool();
              Statement statement = connection.createStatement()) {
             statement.execute(CLEAN_USERS_TABLE_QUERY);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 }
