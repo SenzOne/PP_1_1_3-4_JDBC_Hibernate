@@ -20,8 +20,9 @@ public class UserDaoJDBCImpl implements UserDao {
     private final static String CREATE_USERS_QUERY = "CREATE TABLE IF NOT EXISTS users (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(25), lastName VARCHAR(25), age SMALLINT)";
 
     public void createUsersTable() {
-        try (var connection = Util.getConnection()) {//todo: в качестве ресурса - Statement (можно уедиться, он - AutoCloseable)
-            Statement statement = connection.createStatement();
+        try (var connection = Util.getConnection();
+             Statement statement = connection.createStatement()) {//todo: в качестве ресурса - Statement (можно уедиться, он - AutoCloseable)
+
             boolean executed = statement.execute(CREATE_USERS_QUERY);
             System.out.printf("Таблица users создана %s\n", executed);//todo: все логи - на слое service
         } catch (SQLException e) {
