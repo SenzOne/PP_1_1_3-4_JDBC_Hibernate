@@ -13,6 +13,7 @@ public class UserServiceImpl implements UserService {
         this.userDaoJDBC = new UserDaoJDBCImpl();
     }
 
+    //todo: логи - в остальных методах service-а, System.out.printf(...)
     public void createUsersTable() {
         userDaoJDBC.createUsersTable();
     }

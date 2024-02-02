@@ -3,6 +3,7 @@ package jm.task.core.jdbc.dao;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -13,25 +14,20 @@ public class UserDaoJDBCImpl implements UserDao {
 
     private final static String CREATE_USERS_QUERY =
             "CREATE TABLE IF NOT EXISTS users (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(25), lastName VARCHAR(25), age SMALLINT)";
-
     private final static String DROP_USERS_TABLE_QUERY = "DROP TABLE IF EXISTS users";
-
     private final static String INSERT_IN_TO_USERS_QUERY = "INSERT INTO users (name, lastName, age) VALUES (?, ?, ?)";
-
     private final static String DELETE_USERS_BY_ID_QUERY = "DELETE FROM users WHERE id=?;";
-
     private final static String GET_ALL_USERS_QUERY = "SELECT * FROM users;";
-
     private final static String CLEAN_USERS_TABLE_QUERY = "TRUNCATE TABLE users";
 
+    private final Connection connection;
 
     public UserDaoJDBCImpl() {
-
+        connection = Util.getConnectionFromPool();//todo: рабочий код (инициализация, без учета singleton-паттерна) должна выглядеть так (во всех методах)
     }
 
     public void createUsersTable() {
-        try (var connection = Util.getConnectionFromPool();
-             Statement statement = connection.createStatement()) {
+        try (Statement statement = connection.createStatement()) {
             statement.execute(CREATE_USERS_QUERY);
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage());
@@ -47,7 +43,7 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
-    public void saveUser(String name, String lastName, byte age) {
+    public void saveUser(String name, String lastName, byte age) {//todo: в последующих или, начиная с этой задачи - можно уже переходить на ссылочные типы
         try (var connection = Util.getConnectionFromPool();
              var preparedStatement = connection.prepareStatement(INSERT_IN_TO_USERS_QUERY)) {
             preparedStatement.setString(1, name);
