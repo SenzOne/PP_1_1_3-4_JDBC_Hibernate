@@ -13,12 +13,13 @@ public class UserServiceImpl implements UserService {
         this.userDaoJDBC = new UserDaoJDBCImpl();
     }
 
-    //todo: логи - в остальных методах service-а, System.out.printf(...)
     public void createUsersTable() {
+        System.out.println("таблица создана\n");
         userDaoJDBC.createUsersTable();
     }
 
     public void dropUsersTable() {
+        System.out.println("Таблица удалена\n");
         userDaoJDBC.dropUsersTable();
     }
 
@@ -28,14 +29,17 @@ public class UserServiceImpl implements UserService {
     }
 
     public void removeUserById(long id) {
+        System.out.println("Пользователи удалены: \n");
         userDaoJDBC.removeUserById(id);
     }
 
     public List<User> getAllUsers() {
+        System.out.println("Получены пользователи:\n");
         return userDaoJDBC.getAllUsers();
     }
 
     public void cleanUsersTable() {
+        System.out.println("Таблица очищена.\n");
         userDaoJDBC.cleanUsersTable();
     }
 }
