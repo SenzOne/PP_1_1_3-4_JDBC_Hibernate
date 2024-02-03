@@ -23,7 +23,7 @@ public class UserDaoJDBCImpl implements UserDao {
     private final Connection connection;
 
     public UserDaoJDBCImpl() {
-        connection = Util.getConnectionFromPool();//todo: рабочий код (инициализация, без учета singleton-паттерна) должна выглядеть так (во всех методах)
+        connection = Util.getConnectionFromPool();
     }
 
     public void createUsersTable() {
@@ -43,7 +43,7 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
-    public void saveUser(String name, String lastName, byte age) {//todo: в последующих или, начиная с этой задачи - можно уже переходить на ссылочные типы
+    public void saveUser(String name, String lastName, byte age) {
         try (var connection = Util.getConnectionFromPool();
              var preparedStatement = connection.prepareStatement(INSERT_IN_TO_USERS_QUERY)) {
             preparedStatement.setString(1, name);
